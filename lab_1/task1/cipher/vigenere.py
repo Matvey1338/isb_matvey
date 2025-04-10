@@ -21,17 +21,14 @@ class VigenereCipher:
         for char in text:
             char_lower = char.lower()
             if char_lower in self.alphabet:
-                # Вычисляем сдвиг на основе символа ключа
                 key_char = self.key[key_index % len(self.key)]
                 key_shift = self.alphabet.find(key_char)
 
-                # Находим позицию символа в алфавите
                 char_index = self.alphabet.find(char_lower)
 
                 encrypted_index = (char_index + key_shift) % len(self.alphabet)
                 encrypted_char = self.alphabet[encrypted_index]
 
-                # Сохраняем регистр
                 if char.isupper():
                     encrypted_char = encrypted_char.upper()
 
@@ -56,17 +53,14 @@ class VigenereCipher:
         for char in text:
             char_lower = char.lower()
             if char_lower in self.alphabet:
-                # Вычисляем сдвиг на основе символа ключа
                 key_char = self.key[key_index % len(self.key)]
                 key_shift = self.alphabet.find(key_char)
 
-                # Находим позицию символа в алфавите
                 char_index = self.alphabet.find(char_lower)
 
                 decrypted_index = (char_index - key_shift) % len(self.alphabet)
                 decrypted_char = self.alphabet[decrypted_index]
 
-                # Сохраняем регистр
                 if char.isupper():
                     decrypted_char = decrypted_char.upper()
 
@@ -77,11 +71,3 @@ class VigenereCipher:
                 result.append(char)
 
         return ''.join(result)
-
-    def get_key(self):
-        """
-        Возвращает ключ шифрования
-
-        :return: Ключ шифрования
-        """
-        return self.key

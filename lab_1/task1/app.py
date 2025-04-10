@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, request, session, url_for, redirect, flash
 from cipher.vigenere import VigenereCipher
-from cipher.utils import save_key
+from cipher.utils import save_key, get_next_index
 import secrets
 
 app = Flask(__name__)
@@ -33,13 +33,21 @@ def encrypt():
 
     encrypted_text = cipher.encrypt(text)
 
-    timestamp = secrets.token_hex(4)
-    key_file = os.path.join(OUTPUT_DIR, f'key_{timestamp}.json')
+    indexfile = get_next_index(OUTPUT_DIR)
+    key_file = os.path.join(OUTPUT_DIR, f'key_{indexfile}.json')
+    original_file = os.path.join(OUTPUT_DIR, f'original_{indexfile}.txt')
+    encrypted_file = os.path.join(OUTPUT_DIR, f'encrypted_{indexfile}.txt')
 
-    save_key(key, {
-        'original_text': text,
-        'encrypted_text': encrypted_text
-    }, key_file)
+    # Сохраняем ключ и информацию в JSON
+    save_key(key, key_file)
+
+    # Сохраняем исходный текст
+    with open(original_file, 'w', encoding='utf-8') as f:
+        f.write(text)
+
+    # Сохраняем зашифрованный текст
+    with open(encrypted_file, 'w', encoding='utf-8') as f:
+        f.write(encrypted_text)
 
     session['result'] = {
         'operation': 'encrypt',
@@ -69,14 +77,20 @@ def decrypt():
 
     decrypted_text = cipher.decrypt(text)
 
-    timestamp = secrets.token_hex(4)
-    key_file = os.path.join(OUTPUT_DIR, f'key_{timestamp}.json')
+    indexfile = get_next_index(OUTPUT_DIR)
+    key_file = os.path.join(OUTPUT_DIR, f'key_{indexfile}.json')
+    original_file = os.path.join(OUTPUT_DIR, f'original_encrypted_{indexfile}.txt')
+    decrypted_file = os.path.join(OUTPUT_DIR, f'decrypted_{indexfile}.txt')
 
-    save_key(key, {
-        'timestamp': timestamp,
-        'original_text': text,
-        'encrypted_text': decrypted_text
-    }, key_file)
+    save_key(key, key_file)
+
+    # Сохраняем исходный текст
+    with open(original_file, 'w', encoding = 'utf-8') as f:
+        f.write(text)
+
+    # Сохраняем зашифрованный текст
+    with open(decrypted_file, 'w', encoding = 'utf-8') as f:
+        f.write(decrypted_text)
 
     session['result'] = {
         'operation': 'decrypt',

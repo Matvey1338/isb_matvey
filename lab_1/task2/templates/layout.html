@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Дешифровка текста</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Приложение для дешифровки подстановочного шифра</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Частотный анализ</a></li>
+                <li><a href="{{ url_for('substitution') }}">Замена букв</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p>© 2025 Дешифровка текста</p>
+    </footer>
+</body>
+</html>

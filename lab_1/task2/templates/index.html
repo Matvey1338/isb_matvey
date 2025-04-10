@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Частотный анализ</h2>
+
+<form method="post">
+    <label for="ciphertext">Вставьте зашифрованный текст:</label><br>
+    <textarea id="ciphertext" name="ciphertext" rows="6" cols="80" required>{{ input_text }}</textarea><br>
+    <button type="submit">Анализировать</button>
+</form>
+
+{% if frequency %}
+    <h3>Индекс частот появления букв русского алфавита:</h3>
+    <pre>
+{% for letter, freq in frequency %}
+{{ "{: <2} = {:.6f}".format(letter, freq) }}
+{% endfor %}
+    </pre>
+{% endif %}
+{% endblock %}

@@ -1,14 +1,13 @@
 import os
 import json
-from datetime import datetime
+import re
 
 
-def save_key(key, key_info=None, filename='encryption_key.json'):
+def save_key(key, filename='encryption_key.json'):
     """
     Сохраняет ключ шифрования в JSON-файл
 
     :param key: Ключ шифрования
-    :param key_info: Дополнительная информация о ключе
     :param filename: Имя файла
     :return: Полный путь к файлу
     """
@@ -18,10 +17,18 @@ def save_key(key, key_info=None, filename='encryption_key.json'):
         'key': key,
     }
 
-    if key_info:
-        key_data.update(key_info)
-
     with open(filename, 'w', encoding = 'utf-8') as file:
         json.dump(key_data, file, ensure_ascii = False, indent = 4)
 
     return os.path.abspath(filename)
+
+
+def get_next_index(output_dir):
+    files = os.listdir(output_dir)
+    pattern = re.compile(r'key_(\d+)\.json')
+    indices = [
+        int(match.group(1))
+        for file in files
+        if (match := pattern.match(file))
+    ]
+    return max(indices, default=0) + 1
