@@ -50,13 +50,22 @@ def encrypt():
     encrypted_file = os.path.join(OUTPUT_DIR, f'encrypted_{indexfile}.txt')
 
     # Сохраняем ключ и информацию в JSON
-    save_key(key, key_file)
+    try:
+        save_key(key, key_file)
+    except Exception as e:
+        print(f"Ошибка при сохранении ключа: {e}")
 
     # Сохраняем исходный текст
-    save_file(original_file, text)
+    try:
+        save_file(original_file, text)
+    except Exception as e:
+        print(f"Ошибка при сохранении в файл: {e}")
 
     # Сохраняем зашифрованный текст
-    save_file(encrypted_file, encrypted_text)
+    try:
+        save_file(encrypted_file, encrypted_text)
+    except Exception as e:
+        print(f"Ошибка при сохранении в файл: {e}")
 
     session['result'] = {
         'operation': 'encrypt',
@@ -91,13 +100,23 @@ def decrypt():
     original_file = os.path.join(OUTPUT_DIR, f'original_encrypted_{indexfile}.txt')
     decrypted_file = os.path.join(OUTPUT_DIR, f'decrypted_{indexfile}.txt')
 
-    save_key(key, key_file)
+    try:
+        save_key(key, key_file)
+    except Exception as e:
+        print(f"Ошибка при сохранении ключа: {e}")
 
     # Сохраняем исходный текст
-    save_file(original_file, text)
+    try:
+        save_file(original_file, text)
+    except Exception as e:
+        print(f"Ошибка при сохранении в файл: {e}")
 
     # Сохраняем зашифрованный текст
-    save_file(decrypted_file, decrypted_text)
+    try:
+        save_file(decrypted_file, decrypted_text)
+    except Exception as e:
+        print(f"Ошибка при сохранении в файл: {e}")
+
 
     session['result'] = {
         'operation': 'decrypt',

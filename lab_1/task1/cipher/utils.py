@@ -10,17 +10,24 @@ def save_key(key, filename='encryption_key.json'):
     :param key: Ключ шифрования
     :param filename: Имя файла
     :return: Полный путь к файлу
+    :raises OSError: Если не удается создать директорию или записать файл
     """
-    os.makedirs(os.path.dirname(filename), exist_ok = True)
+    try:
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
 
-    key_data = {
-        'key': key,
-    }
+        key_data = {
+            'key': key,
+        }
 
-    with open(filename, 'w', encoding = 'utf-8') as file:
-        json.dump(key_data, file, ensure_ascii = False, indent = 4)
+        with open(filename, 'w', encoding='utf-8') as file:
+            json.dump(key_data, file, ensure_ascii=False, indent=4)
 
-    return os.path.abspath(filename)
+        return os.path.abspath(filename)
+
+    except OSError as e:
+        raise OSError(f"Ошибка при сохранении ключа в файл {filename}: {str(e)}")
+    except Exception as e:
+        raise Exception(f"Непредвиденная ошибка при сохранении ключа: {str(e)}")
 
 
 def get_next_index(output_dir):
@@ -35,5 +42,18 @@ def get_next_index(output_dir):
 
 
 def save_file(output_dir, text):
-    with open(output_dir, 'w', encoding='utf-8') as f:
-        f.write(text)
+    """
+    Сохраняет текст в файл
+
+    :param output_dir: Путь к файлу
+    :param text: Текст для сохранения
+    :raises OSError: Если не удается записать файл
+    """
+    try:
+        with open(output_dir, 'w', encoding='utf-8') as f:
+            f.write(text)
+
+    except OSError as e:
+        raise OSError(f"Ошибка при записи в файл {output_dir}: {str(e)}")
+    except Exception as e:
+        raise Exception(f"Непредвиденная ошибка при записи файла: {str(e)}")
