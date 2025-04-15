@@ -32,3 +32,8 @@ def get_next_index(output_dir):
         if (match := pattern.match(file))
     ]
     return max(indices, default=0) + 1
+
+
+def save_file(output_dir, text):
+    with open(output_dir, 'w', encoding='utf-8') as f:
+        f.write(text)

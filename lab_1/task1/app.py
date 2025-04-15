@@ -1,8 +1,19 @@
 import os
-from flask import Flask, render_template, request, session, url_for, redirect, flash
-from cipher.vigenere import VigenereCipher
-from cipher.utils import save_key, get_next_index
 import secrets
+
+from flask import (
+    Flask,
+    render_template,
+    request,
+    session,
+    url_for,
+    redirect,
+    flash
+)
+
+from cipher.vigenere import VigenereCipher
+from cipher.utils import save_key, get_next_index, save_file
+
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -42,12 +53,10 @@ def encrypt():
     save_key(key, key_file)
 
     # Сохраняем исходный текст
-    with open(original_file, 'w', encoding='utf-8') as f:
-        f.write(text)
+    save_file(original_file, text)
 
     # Сохраняем зашифрованный текст
-    with open(encrypted_file, 'w', encoding='utf-8') as f:
-        f.write(encrypted_text)
+    save_file(encrypted_file, encrypted_text)
 
     session['result'] = {
         'operation': 'encrypt',
