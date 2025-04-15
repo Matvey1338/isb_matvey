@@ -94,12 +94,10 @@ def decrypt():
     save_key(key, key_file)
 
     # Сохраняем исходный текст
-    with open(original_file, 'w', encoding = 'utf-8') as f:
-        f.write(text)
+    save_file(original_file, text)
 
     # Сохраняем зашифрованный текст
-    with open(decrypted_file, 'w', encoding = 'utf-8') as f:
-        f.write(decrypted_text)
+    save_file(decrypted_file, decrypted_text)
 
     session['result'] = {
         'operation': 'decrypt',
