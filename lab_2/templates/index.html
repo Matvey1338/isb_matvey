@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIST Tests for Random Number Generators</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>NIST Tests for Random Number Generators</h1>
+        <div>
+            <label for="sequence">Enter binary sequence (0s and 1s):</label>
+            <textarea id="sequence" placeholder="Enter sequence of 0s and 1s..."></textarea>
+        </div>
+        <div>
+            <button onclick="runTest('frequency_test')">Frequency Test</button>
+            <button onclick="runTest('runs_test')">Runs Test</button>
+            <button onclick="runTest('block_frequency_test')">Block Frequency Test</button>
+        </div>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        function runTest(testName) {
+            const sequence = document.getElementById('sequence').value.trim();
+            if (!sequence) {
+                alert('Please enter a sequence');
+                return;
+            }
+            
+            // Validate input
+            if (!/^[01]+$/.test(sequence)) {
+                alert('Sequence should contain only 0s and 1s');
+                return;
+            }
+
+            fetch(`/${testName}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ sequence: sequence.split('').map(Number) })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById('result').textContent = 'Error: ' + error.message;
+            });
+        }
+    </script>
+</body>
+</html> 
