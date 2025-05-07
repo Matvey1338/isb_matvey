@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.stats import norm
+from scipy.special import erfc
 
 def frequency_test(sequence):
     """
@@ -14,14 +15,14 @@ def frequency_test(sequence):
             'p_value': None
         }
     
-    # Вычисляем сумму последовательности (количество единиц)
-    S = sum(sequence)
+    # Преобразуем последовательность: '1' -> 1, '0' -> -1
+    x = np.array([1 if bit == 1 or bit == '1' else -1 for bit in sequence])
     
-    # Вычисляем статистику теста
-    S_obs = abs(S - n/2) / np.sqrt(n/4)
+    # Вычисляем S_N по формуле
+    S_N = np.sum(x) / np.sqrt(n)
     
-    # Вычисляем p-value
-    p_value = 2 * (1 - norm.cdf(S_obs))
+    # Вычисляем p-value через erfc
+    p_value = erfc(abs(S_N) / np.sqrt(2))
     
     # Проверяем гипотезу на уровне значимости 0.01
     alpha = 0.01
@@ -31,8 +32,8 @@ def frequency_test(sequence):
         'success': success,
         'message': 'Frequency test passed' if success else 'Frequency test failed',
         'p_value': p_value,
-        'statistic': S_obs,
+        'statistic': S_N,
         'sequence_length': n,
-        'ones_count': S,
-        'zeros_count': n - S
+        'ones_count': int(np.sum(x == 1)),
+        'zeros_count': int(np.sum(x == -1))
     } 

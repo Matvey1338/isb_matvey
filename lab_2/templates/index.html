@@ -35,9 +35,30 @@
         }
         .result {
             margin-top: 20px;
-            padding: 10px;
+            padding: 20px;
             border: 1px solid #ddd;
             border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .result-item {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .result-label {
+            font-weight: bold;
+            color: #333;
+        }
+        .result-value {
+            color: #666;
+        }
+        .success {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .failure {
+            color: #f44336;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -79,7 +100,89 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+                const resultDiv = document.getElementById('result');
+                let resultHtml = `
+                    <div class="result-item">
+                        <span class="result-label">Test Result:</span>
+                        <span class="result-value ${data.success === 'True' ? 'success' : 'failure'}">
+                            ${data.success === 'True' ? 'PASSED' : 'FAILED'}
+                        </span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Message:</span>
+                        <span class="result-value">${data.message}</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">P-value:</span>
+                        <span class="result-value">${data.p_value}</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Test Statistic:</span>
+                        <span class="result-value">${data.statistic}</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Sequence Length:</span>
+                        <span class="result-value">${data.sequence_length}</span>
+                    </div>
+                `;
+                
+                // Show test statistic using the correct key
+                if (data.statistic !== undefined) {
+                    resultHtml += `
+                        <div class="result-item">
+                            <span class="result-label">Test Statistic:</span>
+                            <span class="result-value">${data.statistic}</span>
+                        </div>
+                    `;
+                }
+
+                // Add ones and zeros count if available (Frequency Test)
+                if (data.ones_count !== undefined && data.zeros_count !== undefined) {
+                    resultHtml += `
+                        <div class="result-item">
+                            <span class="result-label">Количество единиц:</span>
+                            <span class="result-value">${data.ones_count}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Количество нулей:</span>
+                            <span class="result-value">${data.zeros_count}</span>
+                        </div>
+                    `;
+                }
+
+                // Add runs count and ones proportion if available (Runs Test)
+                if (data.runs_count !== undefined) {
+                    resultHtml += `
+                        <div class="result-item">
+                            <span class="result-label">Количество серий:</span>
+                            <span class="result-value">${data.runs_count}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Доля единиц:</span>
+                            <span class="result-value">${data.ones_proportion.toFixed(4)}</span>
+                        </div>
+                    `;
+                }
+
+                // Add block information if available (Block Frequency Test)
+                if (data.block_size !== undefined) {
+                    resultHtml += `
+                        <div class="result-item">
+                            <span class="result-label">Размер блока:</span>
+                            <span class="result-value">${data.block_size}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Количество блоков:</span>
+                            <span class="result-value">${data.number_of_blocks}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Частоты в блоках:</span>
+                            <span class="result-value">${JSON.stringify(data.block_frequencies)}</span>
+                        </div>
+                    `;
+                }
+                
+                resultDiv.innerHTML = resultHtml;
             })
             .catch(error => {
                 document.getElementById('result').textContent = 'Error: ' + error.message;
