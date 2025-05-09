@@ -46,7 +46,6 @@ public:
 };
 
 int main() {
-    // Установка русской локали
     setlocale(LC_ALL, "ru_RU.UTF-8");
 
     RandomGenerator128 generator;

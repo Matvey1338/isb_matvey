@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.stats import norm
+from scipy.special import erfc
 
 def runs_test(sequence):
     """
@@ -35,10 +36,10 @@ def runs_test(sequence):
             runs += 1
     
     # Вычисляем статистику теста
-    V_obs = (runs - 2 * n * pi * (1 - pi)) / (2 * np.sqrt(n) * pi * (1 - pi))
+    V_obs = (runs - 2 * n * pi * (1 - pi)) / (2 * np.sqrt(2 * n) * pi * (1 - pi))
     
-    # Вычисляем p-value
-    p_value = 2 * (1 - norm.cdf(abs(V_obs)))
+    # Вычисляем p-value через функцию ошибок
+    p_value = erfc(abs(V_obs))
     
     # Проверяем гипотезу на уровне значимости 0.01
     alpha = 0.01

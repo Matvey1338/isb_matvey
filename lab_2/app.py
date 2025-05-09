@@ -32,7 +32,20 @@ def block_frequency_test_handler():
     sequence = data.get('sequence', [])
     result = block_frequency_test(sequence)
     result['success'] = str(result['success'])
-    return jsonify(result)
+    result['sequence_length'] = len(sequence)
+    response = {
+        'success': result['success'],
+        'message': result['message'],
+        'p_value': result['p_value'],
+        'statistic': result['statistic'],
+        'sequence_length': result['number_of_blocks'] * result['block_size'],
+        'block_size': result['block_size'],
+        'number_of_blocks': result['number_of_blocks'],
+        'v': result['v'],
+        'max_runs': result['max_runs'],
+        'theoretical_probabilities': result['theoretical_probabilities']
+    }
+    return jsonify(response)
 
 if __name__ == '__main__':
     app.run(debug=True) 

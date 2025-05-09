@@ -175,9 +175,30 @@
                             <span class="result-label">Количество блоков:</span>
                             <span class="result-value">${data.number_of_blocks}</span>
                         </div>
+                    `;
+                }
+                // Новое: выводим v, max_runs, theoretical_probabilities
+                if (data.v !== undefined) {
+                    resultHtml += `
                         <div class="result-item">
-                            <span class="result-label">Частоты в блоках:</span>
-                            <span class="result-value">${JSON.stringify(data.block_frequencies)}</span>
+                            <span class="result-label">v (статистика по блокам):</span>
+                            <span class="result-value">[${data.v.join(', ')}]</span>
+                        </div>
+                    `;
+                }
+                if (data.max_runs !== undefined) {
+                    resultHtml += `
+                        <div class="result-item">
+                            <span class="result-label">Максимальные длины единиц в блоках:</span>
+                            <span class="result-value">[${data.max_runs.join(', ')}]</span>
+                        </div>
+                    `;
+                }
+                if (data.theoretical_probabilities !== undefined) {
+                    resultHtml += `
+                        <div class="result-item">
+                            <span class="result-label">Теоретические вероятности (π):</span>
+                            <span class="result-value">[${data.theoretical_probabilities.map((p, i) => `π<sub>${i}</sub> = ${p}`).join('; ')}]</span>
                         </div>
                     `;
                 }
