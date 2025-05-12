@@ -1,18 +1,20 @@
 import numpy as np
 from scipy.stats import norm
 from scipy.special import erfc
+from .constants import SEQUENCE_LENGTH
 
 def runs_test(sequence):
     """
     Тест на одинаковые подряд идущие биты
     Проверяет, является ли количество серий (runs) нулей и единиц случайным
+    Returns:
+        Dictionary containing p_value and raw test data
     """
     n = len(sequence)
-    if n < 100:
+    if n != SEQUENCE_LENGTH:
         return {
-            'success': False,
-            'message': 'Sequence length should be at least 100 bits',
-            'p_value': None
+            'p_value': None,
+            'error': f'Sequence length should be {SEQUENCE_LENGTH} bits'
         }
     
     # Вычисляем сумму последовательности (количество единиц)
@@ -24,13 +26,12 @@ def runs_test(sequence):
     # Проверяем условие для применения теста
     if abs(pi - 0.5) >= 2 / np.sqrt(n):
         return {
-            'success': False,
-            'message': 'Test cannot be applied: proportion of ones is too far from 0.5',
-            'p_value': None
+            'p_value': None,
+            'error': 'Test cannot be applied: proportion of ones is too far from 0.5'
         }
     
     # Подсчитываем количество серий
-    runs = 1
+    runs = 0
     for i in range(1, n):
         if sequence[i] != sequence[i-1]:
             runs += 1
@@ -41,16 +42,9 @@ def runs_test(sequence):
     # Вычисляем p-value через функцию ошибок
     p_value = erfc(abs(V_obs))
     
-    # Проверяем гипотезу на уровне значимости 0.01
-    alpha = 0.01
-    success = p_value >= alpha
-    
     return {
-        'success': success,
-        'message': 'Runs test passed' if success else 'Runs test failed',
         'p_value': p_value,
         'statistic': V_obs,
         'runs_count': runs,
-        'sequence_length': n,
         'ones_proportion': pi
     } 

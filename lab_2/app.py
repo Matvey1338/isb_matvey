@@ -3,6 +3,7 @@ import numpy as np
 from handlers.frequency_test import frequency_test
 from handlers.runs_test import runs_test
 from handlers.block_frequency_test import block_frequency_test
+from handlers.test_result_processor import process_test_result
 
 app = Flask(__name__)
 
@@ -14,7 +15,8 @@ def index():
 def frequency_test_handler():
     data = request.get_json()
     sequence = data.get('sequence', [])
-    result = frequency_test(sequence)
+    raw_result = frequency_test(sequence)
+    result = process_test_result('Frequency test', raw_result['p_value'], raw_result)
     result['success'] = str(result['success'])
     return jsonify(result)
 
@@ -22,7 +24,8 @@ def frequency_test_handler():
 def runs_test_handler():
     data = request.get_json()
     sequence = data.get('sequence', [])
-    result = runs_test(sequence)
+    raw_result = runs_test(sequence)
+    result = process_test_result('Runs test', raw_result['p_value'], raw_result)
     result['success'] = str(result['success'])
     return jsonify(result)
 
@@ -30,7 +33,8 @@ def runs_test_handler():
 def block_frequency_test_handler():
     data = request.get_json()
     sequence = data.get('sequence', [])
-    result = block_frequency_test(sequence)
+    raw_result = block_frequency_test(sequence)
+    result = process_test_result('Block frequency test', raw_result['p_value'], raw_result)
     result['success'] = str(result['success'])
     result['sequence_length'] = len(sequence)
     response = {
