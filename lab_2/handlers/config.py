@@ -6,10 +6,14 @@ def load_constants():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     constants_path = os.path.join(current_dir, 'constants.json')
     
-    with open(constants_path, 'r') as f:
-        constants = json.load(f)
-    
-    return constants
+    try:
+        with open(constants_path, 'r') as f:
+            constants = json.load(f)
+        return constants
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Constants file not found at {constants_path}. Please ensure constants.json exists in the handlers directory.")
+    except json.JSONDecodeError:
+        raise ValueError(f"Invalid JSON format in {constants_path}. Please check the file contents.")
 
 # Load all constants
 CONSTANTS = load_constants()
