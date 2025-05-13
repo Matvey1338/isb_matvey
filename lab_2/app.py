@@ -5,7 +5,7 @@ from handlers.runs_test import runs_test
 from handlers.block_frequency_test import block_frequency_test
 from handlers.test_result_processor import process_test_result
 from handlers.validations import validate_sequence_length, validate_ones_proportion, validate_block_size
-from handlers.constants import BLOCK_SIZE, THEORETICAL_PROBABILITIES
+from handlers.config import BLOCK_SIZE, THEORETICAL_PROBABILITIES
 
 app = Flask(__name__)
 

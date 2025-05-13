@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.special import gammaincc
-from .constants import THEORETICAL_PROBABILITIES
+from .config import THEORETICAL_PROBABILITIES
 
 def block_frequency_test(sequence, block_size=8):
     """

@@ -1,4 +1,4 @@
-from .constants import SIGNIFICANCE_LEVEL
+from .config import SIGNIFICANCE_LEVEL
 
 def process_test_result(test_name, p_value, additional_data=None):
     """
