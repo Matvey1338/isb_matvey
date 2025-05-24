@@ -1,0 +1,21 @@
+body {
+    background-color: #f8f9fa;
+}
+
+h1, h2 {
+    color: #343a40;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.btn-primary {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+a.nav-link:hover {
+    text-decoration: underline;
+}
