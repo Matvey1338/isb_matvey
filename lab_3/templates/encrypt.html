@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Шифрование файла</h2>
+<form method="post" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label>Выберите файл</label>
+    <input type="file" name="file" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label>Имя выходного файла</label>
+    <input name="output_name" class="form-control" value="encrypted.bin">
+  </div>
+  <div class="mb-3">
+    <label>Путь к приватному ключу</label>
+    <input name="private_key_path" class="form-control" value="keys/private.pem">
+  </div>
+  <div class="mb-3">
+    <label>Путь к зашифрованному симметричному ключу</label>
+    <input name="sym_key_path" class="form-control" value="keys/sym_key.enc">
+  </div>
+  <button class="btn btn-primary">Зашифровать</button>
+</form>
+{% endblock %}

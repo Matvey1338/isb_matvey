@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Генерация ключей</h2>
+<form method="post">
+  <div class="mb-3">
+    <label>Длина симметричного ключа (128/192/256)</label>
+    <input name="key_size" class="form-control" value="256">
+  </div>
+  <div class="mb-3">
+    <label>Путь для публичного ключа</label>
+    <input name="public_key_path" class="form-control" value="keys/public.pem">
+  </div>
+  <div class="mb-3">
+    <label>Путь для приватного ключа</label>
+    <input name="private_key_path" class="form-control" value="keys/private.pem">
+  </div>
+  <div class="mb-3">
+    <label>Путь для зашифрованного симметричного ключа</label>
+    <input name="sym_key_path" class="form-control" value="keys/sym_key.enc">
+  </div>
+  <button class="btn btn-primary">Сгенерировать</button>
+</form>
+{% endblock %}

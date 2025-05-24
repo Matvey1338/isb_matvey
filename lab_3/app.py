@@ -1,38 +1,65 @@
-from flask import Flask, request, jsonify
-import logging
+from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
+import logging, os
 from config import Config
 from crypto.hybrid import HybridCipher
 
+# Инициализация
 app = Flask(__name__)
-logging.basicConfig(filename='logs/app.log', level=logging.INFO,
-                    format='%(asctime)s %(levelname)s:%(message)s')
+app.secret_key = os.urandom(16)
 config = Config()
+logging.basicConfig(filename=os.path.join('logs', 'app.log'), level=logging.INFO,
+                    format='%(asctime)s %(levelname)s:%(message)s')
 
-@app.route('/generate-keys', methods=['POST'])
-def generate_keys():
-    data = request.json
-    size = data.get('sym_key_size', config.key_size)
-    paths = data['paths']  # dict: public, private, encrypted_sym
-    HybridCipher.generate_all(size, paths['public_key'],
-                              paths['private_key'], paths['sym_key'])
-    logging.info('Keys generated with sym size %s', size)
-    return jsonify(status='ok')
+# Роуты UI
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-@app.route('/encrypt', methods=['POST'])
-def encrypt():
-    data = request.json
-    HybridCipher.encrypt_file(data['input_file'], data['output_file'],
-                              data['private_key'], data['sym_key'])
-    logging.info('File encrypted: %s', data['output_file'])
-    return jsonify(status='ok')
+@app.route('/generate', methods=['GET','POST'])
+def generate_view():
+    if request.method == 'POST':
+        size = int(request.form['key_size'])
+        paths = {
+            'public_key': request.form['public_key_path'],
+            'private_key': request.form['private_key_path'],
+            'sym_key': request.form['sym_key_path']
+        }
+        HybridCipher.generate_all(size, paths['public_key'],
+                                  paths['private_key'], paths['sym_key'])
+        flash('Ключи успешно сгенерированы')
+        logging.info(f'Generated keys, size={size}')
+        return redirect(url_for('index'))
+    return render_template('generate.html')
 
-@app.route('/decrypt', methods=['POST'])
-def decrypt():
-    data = request.json
-    HybridCipher.decrypt_file(data['input_file'], data['output_file'],
-                              data['private_key'], data['sym_key'])
-    logging.info('File decrypted: %s', data['output_file'])
-    return jsonify(status='ok')
+@app.route('/encrypt', methods=['GET','POST'])
+def encrypt_view():
+    if request.method == 'POST':
+        f = request.files['file']
+        input_path = os.path.join('uploads', f.filename)
+        f.save(input_path)
+        out = os.path.join('uploads', request.form['output_name'])
+        priv = request.form['private_key_path']
+        symk = request.form['sym_key_path']
+        HybridCipher.encrypt_file(input_path, out, priv, symk)
+        flash('Файл зашифрован')
+        logging.info(f'Encrypted file {out}')
+        return redirect(url_for('index'))
+    return render_template('encrypt.html')
+
+@app.route('/decrypt', methods=['GET','POST'])
+def decrypt_view():
+    if request.method == 'POST':
+        f = request.files['file']
+        input_path = os.path.join('uploads', f.filename)
+        f.save(input_path)
+        out = os.path.join('uploads', request.form['output_name'])
+        priv = request.form['private_key_path']
+        symk = request.form['sym_key_path']
+        HybridCipher.decrypt_file(input_path, out, priv, symk)
+        flash('Файл расшифрован')
+        logging.info(f'Decrypted file {out}')
+        return redirect(url_for('index'))
+    return render_template('decrypt.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
