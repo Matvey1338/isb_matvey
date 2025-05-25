@@ -1,9 +1,20 @@
 {
-    "initial_file": "uploads/plain.txt",
-    "encrypted_file": "uploads/encrypted.bin",
-    "decrypted_file": "uploads/decrypted.txt",
-    "symmetric_key": "keys/sym_key.enc",
-    "public_key": "keys/public.pem",
-    "secret_key": "keys/private.pem",
-    "key_size": 256
+    "files": {
+        "initial": "uploads/plain.txt",
+        "encrypted": "uploads/encrypted.bin",
+        "decrypted": "uploads/decrypted.txt"
+    },
+    "keys": {
+        "symmetric": "keys/sym_key.enc",
+        "public": "keys/public.pem",
+        "private": "keys/private.pem"
+    },
+    "crypto": {
+        "key_size": 256,
+        "rsa_key_size": 2048
+    },
+    "directories": [
+        "uploads",
+        "keys"
+    ]
 }
