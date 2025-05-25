@@ -12,7 +12,7 @@ class KeyManager:
 
     def generate_all(self, sym_size: int, public_path: str, private_path: str, encrypted_sym_path: str) -> bytes:
         # generate symmetric key
-        sym_key = self.generate_symmetric_key()
+        sym_key = self.generate_symmetric_key(sym_size)
         
         # generate RSA pair
         priv, pub = self.generate_asymmetric_keys()
@@ -35,5 +35,7 @@ class KeyManager:
         public = private.public_key()
         return private, public
 
-    def generate_symmetric_key(self) -> bytes:
-        return os.urandom(self.config.key_size // 8)
+    def generate_symmetric_key(self, size: int = None) -> bytes:
+        if size is None:
+            size = self.config.key_size
+        return os.urandom(size // 8)
