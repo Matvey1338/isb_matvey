@@ -1,0 +1,9 @@
+{
+    "initial_file": "uploads/plain.txt",
+    "encrypted_file": "uploads/encrypted.bin",
+    "decrypted_file": "uploads/decrypted.txt",
+    "symmetric_key": "keys/sym_key.enc",
+    "public_key": "keys/public.pem",
+    "secret_key": "keys/private.pem",
+    "key_size": 256
+}

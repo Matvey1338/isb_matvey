@@ -1,14 +1,12 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
-import logging, os
-from config import Config
+import os
+from lab_3.config.config import Config
 from crypto.hybrid import HybridCipher
 
 # Инициализация
 app = Flask(__name__)
 app.secret_key = os.urandom(16)
 config = Config()
-logging.basicConfig(filename=os.path.join('logs', 'app.log'), level=logging.INFO,
-                    format='%(asctime)s %(levelname)s:%(message)s')
 
 # Роуты UI
 @app.route('/')
@@ -27,7 +25,6 @@ def generate_view():
         HybridCipher.generate_all(size, paths['public_key'],
                                   paths['private_key'], paths['sym_key'])
         flash('Ключи успешно сгенерированы')
-        logging.info(f'Generated keys, size={size}')
         return redirect(url_for('index'))
     return render_template('generate.html')
 
@@ -53,7 +50,6 @@ def encrypt_view():
             os.remove(input_path)  # Clean up temporary file
 
         flash('Файл зашифрован')
-        logging.info(f'Encrypted file {out}')
         return redirect(url_for('index'))
     return render_template('encrypt.html')
 
@@ -79,7 +75,6 @@ def decrypt_view():
             os.remove(input_path)  # Clean up temporary file
 
         flash('Файл расшифрован')
-        logging.info(f'Decrypted file {out}')
         return redirect(url_for('index'))
     return render_template('decrypt.html')
 

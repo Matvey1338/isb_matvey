@@ -8,10 +8,6 @@ class SymmetricCipher:
         self.iv = iv or os.urandom(16)
         self.cipher = Cipher(algorithms.AES(self.key), modes.CBC(self.iv))
 
-    @staticmethod
-    def generate_key(size_bits: int = 256) -> bytes:
-        return os.urandom(size_bits // 8)
-
     def encrypt(self, data: bytes) -> bytes:
         padder = padding.ANSIX923(128).padder()
         padded = padder.update(data) + padder.finalize()
