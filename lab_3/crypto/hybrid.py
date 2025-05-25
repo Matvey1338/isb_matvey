@@ -9,7 +9,7 @@ class HybridCipher:
         # generate symmetric key
         sym_key = KeyManager.generate_symmetric_key(sym_size)
         # generate RSA pair
-        priv, pub = AsymmetricCipher.generate_keys()
+        priv, pub = KeyManager.generate_symmetric_keys()
         # serialize keys
         KeyManager.serialize_private(priv, private_path)
         KeyManager.serialize_public(pub, public_path)

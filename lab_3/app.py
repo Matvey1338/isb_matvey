@@ -36,18 +36,19 @@ def encrypt_view():
         priv = request.form['private_key_path']
         symk = request.form['sym_key_path']
 
-        if input_type == 'file':
-            f = request.files['file']
-            input_path = os.path.join('uploads', f.filename)
-            f.save(input_path)
-            HybridCipher.encrypt_file(input_path, out, priv, symk)
-        else:  # text input
-            text = request.form['text']
-            input_path = os.path.join('uploads', 'temp_input.txt')
-            with open(input_path, 'w', encoding='utf-8') as f:
-                f.write(text)
-            HybridCipher.encrypt_file(input_path, out, priv, symk)
-            os.remove(input_path)  # Clean up temporary file
+        match input_type:
+            case 'file':
+                f = request.files['file']
+                input_path = os.path.join('uploads', f.filename)
+                f.save(input_path)
+                HybridCipher.encrypt_file(input_path, out, priv, symk)
+            case _:  # text input
+                text = request.form['text']
+                input_path = os.path.join('uploads', 'temp_input.txt')
+                with open(input_path, 'w', encoding='utf-8') as f:
+                    f.write(text)
+                HybridCipher.encrypt_file(input_path, out, priv, symk)
+                os.remove(input_path)  # Clean up temporary file
 
         flash('Файл зашифрован')
         return redirect(url_for('index'))
@@ -61,18 +62,19 @@ def decrypt_view():
         priv = request.form['private_key_path']
         symk = request.form['sym_key_path']
 
-        if input_type == 'file':
-            f = request.files['file']
-            input_path = os.path.join('uploads', f.filename)
-            f.save(input_path)
-            HybridCipher.decrypt_file(input_path, out, priv, symk)
-        else:  # text input
-            text = request.form['text']
-            input_path = os.path.join('uploads', 'temp_input.txt')
-            with open(input_path, 'w', encoding='utf-8') as f:
-                f.write(text)
-            HybridCipher.decrypt_file(input_path, out, priv, symk)
-            os.remove(input_path)  # Clean up temporary file
+        match input_type:
+            case 'file':
+                f = request.files['file']
+                input_path = os.path.join('uploads', f.filename)
+                f.save(input_path)
+                HybridCipher.decrypt_file(input_path, out, priv, symk)
+            case _:  # text input
+                text = request.form['text']
+                input_path = os.path.join('uploads', 'temp_input.txt')
+                with open(input_path, 'w', encoding='utf-8') as f:
+                    f.write(text)
+                HybridCipher.decrypt_file(input_path, out, priv, symk)
+                os.remove(input_path)  # Clean up temporary file
 
         flash('Файл расшифрован')
         return redirect(url_for('index'))

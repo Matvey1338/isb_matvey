@@ -1,0 +1,18 @@
+{
+    "symmetric": {
+        "key_size": 256
+    },
+    "asymmetric": {
+        "key_size": 2048
+    },
+    "hash": {
+        "algorithm": "SHA256"
+    },
+    "padding": {
+        "scheme": "PKCS7"
+    },
+    "paths": {
+        "private_key": "private_key.pem",
+        "public_key": "public_key.pem"
+    }
+} 
