@@ -14,11 +14,11 @@ class KeyManager:
         except Exception as e:
             raise RuntimeError(f"Ошибка инициализации KeyManager: {str(e)}")
 
-    def generate_all(self, sym_size: int, public_path: str, private_path: str, encrypted_sym_path: str) -> bytes:
+    def generate_all(self, public_path: str, private_path: str, encrypted_sym_path: str) -> bytes:
         """Generate all keys"""
         try:
             # generate symmetric key
-            sym_key = self.generate_symmetric_key(sym_size)
+            sym_key = self.generate_symmetric_key()
             
             # generate RSA pair
             priv, pub = self.generate_asymmetric_keys()
@@ -51,11 +51,9 @@ class KeyManager:
         except Exception as e:
             raise RuntimeError(f"Ошибка при генерации асимметричных ключей: {str(e)}")
 
-    def generate_symmetric_key(self, size: int = None) -> bytes:
+    def generate_symmetric_key(self) -> bytes:
         """Generate symmetric key"""
         try:
-            if size is None:
-                size = self.config.key_size
-            return os.urandom(size // 8)
+            return os.urandom(self.config.key_size // 8)
         except Exception as e:
             raise RuntimeError(f"Ошибка при генерации симметричного ключа: {str(e)}")

@@ -10,7 +10,7 @@
         "private": "keys/private.pem"
     },
     "crypto": {
-        "key_size": 256,
+        "key_size": 128,
         "rsa_key_size": 2048
     },
     "directories": [

@@ -25,7 +25,6 @@ class CryptoApp:
         def generate_view():
             if request.method == 'POST':
                 try:
-                    size = int(request.form['key_size'])
                     paths = {
                         'public_key': request.form['public_key_path'],
                         'private_key': request.form['private_key_path'],
@@ -34,7 +33,6 @@ class CryptoApp:
                     
                     # Generate all keys
                     sym_key = self.key_manager.generate_all(
-                        size,
                         paths['public_key'],
                         paths['private_key'],
                         paths['sym_key']
