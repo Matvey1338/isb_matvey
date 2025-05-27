@@ -13,9 +13,9 @@ class CryptoApp:
         self.app = Flask(__name__)
         self.app.secret_key = os.urandom(16)
         self.config = Config.from_json()
-        self.crypto_config = CryptoConfig.from_json()
-        self.key_manager = KeyManager(self.config)
-        self.key_file_manager = KeyFileManager(self.config)
+        self.crypto_config = CryptoConfig()
+        self.key_manager = KeyManager(self.crypto_config)
+        self.key_file_manager = KeyFileManager(self.crypto_config)
         self.hybrid_cipher = HybridCipher(self.config)
         self.setup_routes()
 
