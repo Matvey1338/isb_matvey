@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
 import os
 from pathlib import Path
-from config.config import Config, default_config
+from config.config import Config
 from config.crypto_config import CryptoConfig
 from crypto.hybrid import HybridCipher
 from crypto.key_manager import KeyManager
@@ -12,7 +12,7 @@ class CryptoApp:
     def __init__(self):
         self.app = Flask(__name__)
         self.app.secret_key = os.urandom(16)
-        self.config = default_config
+        self.config = Config.from_json()
         self.crypto_config = CryptoConfig.from_json()
         self.key_manager = KeyManager(self.config)
         self.key_file_manager = KeyFileManager(self.config)

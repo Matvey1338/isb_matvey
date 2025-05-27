@@ -14,6 +14,14 @@ class EncryptionMode(Enum):
 class SymmetricCipher:
     """Class for Symmetric Cipher"""
     def __init__(self, key: bytes, mode: EncryptionMode = EncryptionMode.CBC, iv: bytes = None):
+        """
+        Initialize SymmetricCipher with IDEA algorithm
+        :param key: encryption key (must be 16 bytes)
+        :param mode: encryption mode (default: CBC)
+        :param iv: initialization vector (optional, generated if not provided)
+        :return: None
+        :raises ValueError: if key length is not 16 bytes or mode is not supported
+        """
         if len(key) != 16:
             raise ValueError("IDEA requires a 16-byte key")
         self.key = key
@@ -42,7 +50,12 @@ class SymmetricCipher:
         )
 
     def encrypt(self, data: bytes) -> bytes:
-        """IDEA Data Encryption"""
+        """
+        Encrypts data using IDEA algorithm
+        :param data: data to encrypt
+        :return: encrypted data (includes IV for CBC, CFB, and OFB modes)
+        :raises RuntimeError: if encryption fails
+        """
         try:
             padder = padding.PKCS7(64).padder()
             padded_data = padder.update(data) + padder.finalize()
@@ -61,7 +74,12 @@ class SymmetricCipher:
             raise RuntimeError(f"Ошибка шифрования IDEA: {str(e)}")
 
     def decrypt(self, token: bytes) -> bytes:
-        """IDEA Data Decryption"""
+        """
+        Decrypts data using IDEA algorithm
+        :param token: encrypted data to decrypt (includes IV for CBC, CFB, and OFB modes)
+        :return: decrypted data
+        :raises RuntimeError: if decryption fails
+        """
         try:
             # Извлекаем IV для режимов, которые его используют
             match self.mode:

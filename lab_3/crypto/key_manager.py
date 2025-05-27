@@ -6,7 +6,11 @@ from crypto.asymmetric import AsymmetricCipher
 from crypto.key_file_manager import KeyFileManager
 
 class KeyManager:
-    """Class for Key Manager"""
+    """
+    Class for managing cryptographic keys
+    :param config: configuration object for key management
+    :raises RuntimeError: if initialization fails
+    """
     def __init__(self, config: CryptoConfig = default_config):
         try:
             self.config = config
@@ -15,7 +19,14 @@ class KeyManager:
             raise RuntimeError(f"Ошибка инициализации KeyManager: {str(e)}")
 
     def generate_all(self, public_path: str, private_path: str, encrypted_sym_path: str) -> bytes:
-        """Generate all keys"""
+        """
+        Generate and save all required keys
+        :param public_path: path to save public key
+        :param private_path: path to save private key
+        :param encrypted_sym_path: path to save encrypted symmetric key
+        :return: generated symmetric key
+        :raises RuntimeError: if key generation or saving fails
+        """
         try:
             # generate symmetric key
             sym_key = self.generate_symmetric_key()
@@ -39,12 +50,16 @@ class KeyManager:
         except Exception as e:
             raise RuntimeError(f"Ошибка при генерации ключей: {str(e)}")
 
-    def generate_asymmetric_keys(self):
-        """Generate asymmetric keys"""
+    def generate_asymmetric_keys(self) -> tuple:
+        """
+        Generate RSA key pair
+        :return: tuple of (private_key, public_key)
+        :raises RuntimeError: if key generation fails
+        """
         try:
             private = rsa.generate_private_key(
                 public_exponent=65537,
-                key_size=self.config.rsa_key_size
+                key_size=self.config.RSA_KEY_SIZE
             )
             public = private.public_key()
             return private, public
@@ -52,8 +67,12 @@ class KeyManager:
             raise RuntimeError(f"Ошибка при генерации асимметричных ключей: {str(e)}")
 
     def generate_symmetric_key(self) -> bytes:
-        """Generate symmetric key"""
+        """
+        Generate symmetric key
+        :return: generated symmetric key
+        :raises RuntimeError: if key generation fails
+        """
         try:
-            return os.urandom(self.config.key_size // 8)
+            return os.urandom(self.config.SYMMETRIC_KEY_SIZE // 8)
         except Exception as e:
             raise RuntimeError(f"Ошибка при генерации симметричного ключа: {str(e)}")

@@ -5,6 +5,9 @@ from crypto.symmetric import EncryptionMode
 
 @dataclass
 class CryptoConfig:
+    """
+    Configuration class for cryptographic operations
+    """
     # Symmetric encryption parameters
     SYMMETRIC_KEY_SIZE: int
     ENCRYPTION_MODE: EncryptionMode
@@ -19,7 +22,16 @@ class CryptoConfig:
     PUBLIC_KEY_PATH: str
 
     @classmethod
-    def from_json(cls, config_path: str = None):
+    def from_json(cls, config_path: str = None) -> 'CryptoConfig':
+        """
+        Load configuration from JSON file
+        :param config_path: path to configuration file (optional)
+        :return: CryptoConfig instance
+        :raises FileNotFoundError: if configuration file not found
+        :raises ValueError: if JSON format is invalid
+        :raises KeyError: if required configuration key is missing
+        :raises Exception: for other errors
+        """
         if config_path is None:
             config_path = Path(__file__).parent / "crypto_config.json"
         

@@ -5,7 +5,12 @@ class AsymmetricCipher:
     """Class for Asymmetric Cipher"""
     @staticmethod
     def encrypt(public_key, data: bytes) -> bytes:
-        """Asymmetric Encryption"""
+        """
+        Encrypts data using asymmetric encryption
+        :param public_key: public key for encryption
+        :param data: data to encrypt
+        :return: encrypted data
+        """
         try:
             return public_key.encrypt(
                 data,
@@ -19,7 +24,12 @@ class AsymmetricCipher:
 
     @staticmethod
     def decrypt(private_key, token: bytes) -> bytes:
-        """Asymmetric Decryption"""
+        """
+        Decrypts data using asymmetric decryption
+        :param private_key: private key for decryption
+        :param token: encrypted data to decrypt
+        :return: decrypted data
+        """
         try:
             return private_key.decrypt(
                 token,
