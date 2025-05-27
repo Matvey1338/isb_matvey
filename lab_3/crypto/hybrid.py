@@ -1,5 +1,5 @@
 import os
-from .symmetric import SymmetricCipher
+from .symmetric import SymmetricCipher, EncryptionMode
 from .asymmetric import AsymmetricCipher
 from crypto.key_manager import KeyManager
 from crypto.key_file_manager import KeyFileManager
@@ -12,13 +12,13 @@ class HybridCipher:
         self.key_file_manager = KeyFileManager(config)
         self.config = config
 
-    def encrypt_file(self, input_path, output_path, priv_path, enc_sym_path):
+    def encrypt_file(self, input_path, output_path, priv_path, enc_sym_path, mode: EncryptionMode = EncryptionMode.CBC):
         """Encrypt file"""
         try:
             priv = self.key_file_manager.load_private(priv_path)
             with open(enc_sym_path, 'rb') as f:
                 sym_key = AsymmetricCipher.decrypt(priv, f.read())
-            cipher = SymmetricCipher(sym_key, mode=self.config.ENCRYPTION_MODE)
+            cipher = SymmetricCipher(sym_key, mode=mode)
             with open(input_path, 'rb') as fin:
                 data = fin.read()
             ct = cipher.encrypt(data)
@@ -31,13 +31,13 @@ class HybridCipher:
         except Exception as e:
             raise RuntimeError(f"Ошибка при шифровании файла: {str(e)}")
 
-    def decrypt_file(self, input_path, output_path, priv_path, enc_sym_path):
+    def decrypt_file(self, input_path, output_path, priv_path, enc_sym_path, mode: EncryptionMode = EncryptionMode.CBC):
         """Decrypt file"""
         try:
             priv = self.key_file_manager.load_private(priv_path)
             with open(enc_sym_path, 'rb') as f:
                 sym_key = AsymmetricCipher.decrypt(priv, f.read())
-            cipher = SymmetricCipher(sym_key, mode=self.config.ENCRYPTION_MODE)
+            cipher = SymmetricCipher(sym_key, mode=mode)
             with open(input_path, 'rb') as fin:
                 data = fin.read()
             pt = cipher.decrypt(data)

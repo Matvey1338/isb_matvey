@@ -57,23 +57,21 @@ class CryptoApp:
                     priv = request.form['private_key_path']
                     symk = request.form['sym_key_path']
                     
-                    # Обновляем режим шифрования в конфигурации
-                    encryption_mode = request.form.get('encryption_mode', 'CBC')
-                    self.crypto_config.ENCRYPTION_MODE = EncryptionMode[encryption_mode]
-                    self.hybrid_cipher.config = self.crypto_config
+                    # Получаем режим шифрования из формы
+                    encryption_mode = EncryptionMode[request.form.get('encryption_mode', 'CBC')]
 
                     match input_type:
                         case 'file':
                             f = request.files['file']
                             input_path = os.path.join('uploads', f.filename)
                             f.save(input_path)
-                            self.hybrid_cipher.encrypt_file(input_path, out, priv, symk)
+                            self.hybrid_cipher.encrypt_file(input_path, out, priv, symk, mode=encryption_mode)
                         case _:  # text input
                             text = request.form['text']
                             input_path = os.path.join('uploads', 'temp_input.txt')
                             with open(input_path, 'w', encoding='utf-8') as f:
                                 f.write(text)
-                            self.hybrid_cipher.encrypt_file(input_path, out, priv, symk)
+                            self.hybrid_cipher.encrypt_file(input_path, out, priv, symk, mode=encryption_mode)
                             os.remove(input_path)  # Clean up temporary file
 
                     flash('Файл зашифрован')
@@ -92,23 +90,21 @@ class CryptoApp:
                     priv = request.form['private_key_path']
                     symk = request.form['sym_key_path']
                     
-                    # Обновляем режим шифрования в конфигурации
-                    encryption_mode = request.form.get('encryption_mode', 'CBC')
-                    self.crypto_config.ENCRYPTION_MODE = EncryptionMode[encryption_mode]
-                    self.hybrid_cipher.config = self.crypto_config
+                    # Получаем режим шифрования из формы
+                    encryption_mode = EncryptionMode[request.form.get('encryption_mode', 'CBC')]
 
                     match input_type:
                         case 'file':
                             f = request.files['file']
                             input_path = os.path.join('uploads', f.filename)
                             f.save(input_path)
-                            self.hybrid_cipher.decrypt_file(input_path, out, priv, symk)
+                            self.hybrid_cipher.decrypt_file(input_path, out, priv, symk, mode=encryption_mode)
                         case _:  # text input
                             text = request.form['text']
                             input_path = os.path.join('uploads', 'temp_input.txt')
                             with open(input_path, 'w', encoding='utf-8') as f:
                                 f.write(text)
-                            self.hybrid_cipher.decrypt_file(input_path, out, priv, symk)
+                            self.hybrid_cipher.decrypt_file(input_path, out, priv, symk, mode=encryption_mode)
                             os.remove(input_path)  # Clean up temporary file
 
                     flash('Файл расшифрован')

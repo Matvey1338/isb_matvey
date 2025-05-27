@@ -49,6 +49,7 @@ class SymmetricCipher:
             encryptor = self.cipher.encryptor()
             encrypted = encryptor.update(padded_data) + encryptor.finalize()
             
+            # Добавляем IV только для режимов, которые его используют
             match self.mode:
                 case EncryptionMode.CBC | EncryptionMode.CFB | EncryptionMode.OFB:
                     return self.iv + encrypted
@@ -62,6 +63,7 @@ class SymmetricCipher:
     def decrypt(self, token: bytes) -> bytes:
         """IDEA Data Decryption"""
         try:
+            # Извлекаем IV для режимов, которые его используют
             match self.mode:
                 case EncryptionMode.CBC | EncryptionMode.CFB | EncryptionMode.OFB:
                     iv, ct = token[:8], token[8:]
