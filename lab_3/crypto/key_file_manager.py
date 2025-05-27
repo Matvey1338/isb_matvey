@@ -1,13 +1,13 @@
 from cryptography.hazmat.primitives import serialization
 from pathlib import Path
-from config.crypto_config import CryptoConfig, default_config
+from config.crypto_config import CryptoConfig
 
 class KeyFileManager:
     """
     Class for managing cryptographic key files
     :param config: configuration object for key file management
     """
-    def __init__(self, config: CryptoConfig = default_config):
+    def __init__(self, config: CryptoConfig):
         self.config = config
 
     def _write_to_file(self, path: str, data: bytes) -> None:
@@ -49,7 +49,7 @@ class KeyFileManager:
         try:
             match path:
                 case None:
-                    path = self.config.PRIVATE_KEY_PATH
+                    path = self.config.private_key_path
                 case _:
                     pass
             pem = private_key.private_bytes(
@@ -71,7 +71,7 @@ class KeyFileManager:
         try:
             match path:
                 case None:
-                    path = self.config.PUBLIC_KEY_PATH
+                    path = self.config.public_key_path
                 case _:
                     pass
             pem = public_key.public_bytes(
@@ -93,7 +93,7 @@ class KeyFileManager:
         try:
             match path:
                 case None:
-                    path = self.config.PRIVATE_KEY_PATH
+                    path = self.config.private_key_path
                 case _:
                     pass
             data = self._read_from_file(path)
@@ -114,7 +114,7 @@ class KeyFileManager:
         try:
             match path:
                 case None:
-                    path = self.config.PUBLIC_KEY_PATH
+                    path = self.config.public_key_path
                 case _:
                     pass
             data = self._read_from_file(path)

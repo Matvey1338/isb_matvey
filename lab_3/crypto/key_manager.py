@@ -1,7 +1,7 @@
 import os
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
-from config.crypto_config import CryptoConfig, default_config
+from config.crypto_config import CryptoConfig
 from crypto.asymmetric import AsymmetricCipher
 from crypto.key_file_manager import KeyFileManager
 
@@ -11,7 +11,7 @@ class KeyManager:
     :param config: configuration object for key management
     :raises RuntimeError: if initialization fails
     """
-    def __init__(self, config: CryptoConfig = default_config):
+    def __init__(self, config: CryptoConfig):
         try:
             self.config = config
             self.file_manager = KeyFileManager(config)
@@ -59,7 +59,7 @@ class KeyManager:
         try:
             private = rsa.generate_private_key(
                 public_exponent=65537,
-                key_size=self.config.RSA_KEY_SIZE
+                key_size=self.config.rsa_key_size
             )
             public = private.public_key()
             return private, public
@@ -73,6 +73,6 @@ class KeyManager:
         :raises RuntimeError: if key generation fails
         """
         try:
-            return os.urandom(self.config.SYMMETRIC_KEY_SIZE // 8)
+            return os.urandom(self.config.symmetric_key_size // 8)
         except Exception as e:
             raise RuntimeError(f"Ошибка при генерации симметричного ключа: {str(e)}")
