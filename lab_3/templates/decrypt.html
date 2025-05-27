@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Дешифрование файла</h2>
+<h2>Расшифрование файла</h2>
 <form method="post" enctype="multipart/form-data">
   <div class="mb-3">
     <label>Выберите способ ввода:</label>
@@ -14,12 +14,21 @@
     </div>
   </div>
   <div class="mb-3" id="fileInputDiv">
-    <label>Выберите зашифрованный файл</label>
+    <label>Выберите файл</label>
     <input type="file" name="file" class="form-control">
   </div>
   <div class="mb-3" id="textInputDiv" style="display: none;">
-    <label>Введите зашифрованный текст</label>
+    <label>Введите текст</label>
     <textarea name="text" class="form-control" rows="5"></textarea>
+  </div>
+  <div class="mb-3">
+    <label>Режим шифрования</label>
+    <select name="encryption_mode" class="form-control">
+      <option value="CBC">CBC (Cipher Block Chaining)</option>
+      <option value="ECB">ECB (Electronic Codebook)</option>
+      <option value="CFB">CFB (Cipher Feedback)</option>
+      <option value="OFB">OFB (Output Feedback)</option>
+    </select>
   </div>
   <div class="mb-3">
     <label>Имя выходного файла</label>
@@ -33,7 +42,7 @@
     <label>Путь к зашифрованному симметричному ключу</label>
     <input name="sym_key_path" class="form-control" value="keys/sym_key.enc">
   </div>
-  <button class="btn btn-primary">Дешифровать</button>
+  <button class="btn btn-primary">Расшифровать</button>
 </form>
 
 <script>

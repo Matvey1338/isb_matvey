@@ -2,15 +2,18 @@ from flask import Flask, request, render_template, redirect, url_for, flash
 import os
 from pathlib import Path
 from config.config import Config, default_config
+from config.crypto_config import CryptoConfig
 from crypto.hybrid import HybridCipher
 from crypto.key_manager import KeyManager
 from crypto.key_file_manager import KeyFileManager
+from crypto.symmetric import EncryptionMode
 
 class CryptoApp:
     def __init__(self):
         self.app = Flask(__name__)
         self.app.secret_key = os.urandom(16)
         self.config = default_config
+        self.crypto_config = CryptoConfig.from_json()
         self.key_manager = KeyManager(self.config)
         self.key_file_manager = KeyFileManager(self.config)
         self.hybrid_cipher = HybridCipher(self.config)
@@ -53,6 +56,11 @@ class CryptoApp:
                     out = os.path.join('uploads', request.form['output_name'])
                     priv = request.form['private_key_path']
                     symk = request.form['sym_key_path']
+                    
+                    # Обновляем режим шифрования в конфигурации
+                    encryption_mode = request.form.get('encryption_mode', 'CBC')
+                    self.crypto_config.ENCRYPTION_MODE = EncryptionMode[encryption_mode]
+                    self.hybrid_cipher.config = self.crypto_config
 
                     match input_type:
                         case 'file':
@@ -83,6 +91,11 @@ class CryptoApp:
                     out = os.path.join('uploads', request.form['output_name'])
                     priv = request.form['private_key_path']
                     symk = request.form['sym_key_path']
+                    
+                    # Обновляем режим шифрования в конфигурации
+                    encryption_mode = request.form.get('encryption_mode', 'CBC')
+                    self.crypto_config.ENCRYPTION_MODE = EncryptionMode[encryption_mode]
+                    self.hybrid_cipher.config = self.crypto_config
 
                     match input_type:
                         case 'file':

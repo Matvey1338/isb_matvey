@@ -10,6 +10,7 @@ class HybridCipher:
     def __init__(self, config=default_config):
         self.key_manager = KeyManager(config)
         self.key_file_manager = KeyFileManager(config)
+        self.config = config
 
     def encrypt_file(self, input_path, output_path, priv_path, enc_sym_path):
         """Encrypt file"""
@@ -17,7 +18,7 @@ class HybridCipher:
             priv = self.key_file_manager.load_private(priv_path)
             with open(enc_sym_path, 'rb') as f:
                 sym_key = AsymmetricCipher.decrypt(priv, f.read())
-            cipher = SymmetricCipher(sym_key)
+            cipher = SymmetricCipher(sym_key, mode=self.config.ENCRYPTION_MODE)
             with open(input_path, 'rb') as fin:
                 data = fin.read()
             ct = cipher.encrypt(data)
@@ -36,7 +37,7 @@ class HybridCipher:
             priv = self.key_file_manager.load_private(priv_path)
             with open(enc_sym_path, 'rb') as f:
                 sym_key = AsymmetricCipher.decrypt(priv, f.read())
-            cipher = SymmetricCipher(sym_key)
+            cipher = SymmetricCipher(sym_key, mode=self.config.ENCRYPTION_MODE)
             with open(input_path, 'rb') as fin:
                 data = fin.read()
             pt = cipher.decrypt(data)

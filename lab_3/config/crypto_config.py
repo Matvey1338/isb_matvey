@@ -1,11 +1,13 @@
 import json
 from dataclasses import dataclass
 from pathlib import Path
+from crypto.symmetric import EncryptionMode
 
 @dataclass
 class CryptoConfig:
     # Symmetric encryption parameters
     SYMMETRIC_KEY_SIZE: int
+    ENCRYPTION_MODE: EncryptionMode
     # Asymmetric encryption parameters
     RSA_KEY_SIZE: int
     # Hash parameters
@@ -27,6 +29,7 @@ class CryptoConfig:
             
             return cls(
                 SYMMETRIC_KEY_SIZE=config_data["symmetric"]["key_size"],
+                ENCRYPTION_MODE=EncryptionMode[config_data["symmetric"]["mode"]],
                 RSA_KEY_SIZE=config_data["asymmetric"]["key_size"],
                 HASH_ALGORITHM=config_data["hash"]["algorithm"],
                 PADDING_SCHEME=config_data["padding"]["scheme"],

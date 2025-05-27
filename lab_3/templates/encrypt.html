@@ -22,6 +22,15 @@
     <textarea name="text" class="form-control" rows="5"></textarea>
   </div>
   <div class="mb-3">
+    <label>Режим шифрования</label>
+    <select name="encryption_mode" class="form-control">
+      <option value="CBC">CBC (Cipher Block Chaining)</option>
+      <option value="ECB">ECB (Electronic Codebook)</option>
+      <option value="CFB">CFB (Cipher Feedback)</option>
+      <option value="OFB">OFB (Output Feedback)</option>
+    </select>
+  </div>
+  <div class="mb-3">
     <label>Имя выходного файла</label>
     <input name="output_name" class="form-control" value="encrypted.bin">
   </div>

@@ -1,6 +1,7 @@
 {
     "symmetric": {
-        "key_size": 256
+        "key_size": 128,
+        "mode": "CBC"
     },
     "asymmetric": {
         "key_size": 2048
